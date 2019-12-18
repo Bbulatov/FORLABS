@@ -1,0 +1,212 @@
+#include<iostream>
+#include<string>
+#include<iomanip>
+using namespace std;
+
+double myfunction(double x)
+{
+	double y=(1 - x)*(1 - x) + exp(x);
+	return y;
+}
+
+double myuntilfunction(double x)
+{
+	double y;
+	y = ((1 - x)*(1 - x) + exp(x)) * sin(5 * x);
+	return y;
+}
+
+double randomaiser()
+{
+	double q;
+	q = rand() % 10000 / 1000. - 7.;
+	if (q < -4.)
+	{
+		q += 6.;
+	}
+	if (q > 3.)
+	{
+		q -= 7.;
+	}
+	return q;
+}
+
+void otzhig(double a, double b)
+{
+	srand(time(NULL));
+	int p = 1;
+	double X_i_1, X_i, F_xi, F_x_i_1, delta_F, P, Tmax = 10000.000, Tmin = 0.0099, F_min, P_protection, X_I_MIN;
+	string P_=" ";
+	F_min = myfunction(a);
+	X_i_1 = randomaiser();
+	F_x_i_1 = myfunction(X_i_1);
+	cout << "             T           x         f(x)       P"<<endl;
+	while (Tmax > Tmin) 
+	{
+		X_i = randomaiser();
+		F_xi = myfunction(X_i);
+		delta_F = F_xi - F_x_i_1;
+		if (delta_F <= 0.)
+		{
+			P = 1.;
+			P_ = "true";
+			X_i_1 = X_i;
+			F_x_i_1 = myfunction(X_i);
+		}
+		else
+		{
+			P = exp(-(delta_F / Tmax));
+			P_protection = rand() % 9999;
+			P_protection /= 10000.;
+			if (P_protection <= P)
+			{
+				P_ = "true";
+				X_i_1 = X_i;
+				F_x_i_1 = myfunction(X_i);
+			}
+			else
+			{
+				P = exp(-(delta_F / Tmax));
+				P_ = "false";
+				X_i_1 = X_i_1;
+				F_x_i_1 = myfunction(X_i_1);
+			}
+		}
+		if (p / 10 == 0)
+			cout << p << ")    ";
+		else 
+			if (p / 100 == 0)
+				cout << p << ")   ";
+			else 
+				if (p / 1000 == 0)
+					cout << p << ")  ";
+		if (Tmax / 10000 == 1)
+			cout << fixed << setprecision(5) << " | " << Tmax;
+		else
+			if ( (int)Tmax / 10000 == 0 )
+				cout << fixed << setprecision(5) << " | " << ' ' << (double) Tmax;
+			else 
+				if((int)Tmax / 1000 == 0)
+					cout << fixed << setprecision(5) << " | " << '  ' <<(double) Tmax;
+				else 
+					if ((int)Tmax / 100 == 0)
+						cout << fixed << setprecision(5) << " | " << '   ' << (double) Tmax;
+					else 
+						if ((int)Tmax / 10 ==0)
+							cout << fixed << setprecision(5) << " | " << '    ' << (double) Tmax;
+		if (X_i<0)
+			cout << fixed << setprecision(5) << " |" << X_i;
+		else
+			cout << fixed << setprecision(5) << " | " << X_i;
+		if ((int)myfunction(X_i) / 10 == 0)
+			cout << fixed << setprecision(5) << " | " << myfunction(X_i);
+		else
+			cout << fixed << setprecision(5) << " |" << myfunction(X_i);
+		cout << fixed << setprecision(5) << " | " << P;
+		cout << " | " << P_ << endl;
+		p++;
+		Tmax *= 0.95; 
+		if (myfunction(X_i) < F_min)
+		{
+			F_min = myfunction(X_i);
+			X_I_MIN = X_i;
+		}
+	}
+	cout << endl << "Минимум функции:" << F_min << endl << "Значение х в минимумe:" << X_I_MIN << endl << endl;
+	Tmax = 10000.000;
+	p = 1;
+	X_i_1 = randomaiser();
+	F_x_i_1 = myuntilfunction(X_i_1);
+	cout << "             T           x           f(x)       P" << endl;
+	while (Tmax > Tmin)
+	{
+		F_x_i_1 = myuntilfunction(X_i_1);
+		X_i = randomaiser();
+		F_xi = myuntilfunction(X_i);
+		delta_F = F_xi - F_x_i_1;
+		if (delta_F <= 0)
+		{
+			P = 1.;
+			P_ = "true";
+			X_i_1 = X_i;
+			F_x_i_1 = myfunction(X_i);
+		}
+		else
+		{
+			P = exp(-(delta_F / Tmax));
+			P_protection = rand() % 9999;
+			P_protection = P_protection / 10000.;
+			if (P_protection <= P)
+			{
+				P_ = "true";
+				X_i_1 = X_i;
+				F_x_i_1 = myuntilfunction(X_i);
+			}
+			else
+			{
+				P = exp(-(delta_F / Tmax));
+				P_ = "false";
+				X_i_1 = X_i_1;
+				F_x_i_1 = myuntilfunction(X_i_1);
+			}
+		}
+		if (p / 10 == 0)
+			cout << p << ")    ";
+		else
+			if (p / 100 == 0)
+				cout << p << ")   ";
+			else
+				if (p / 1000 == 0)
+					cout << p << ")  ";
+		if (Tmax / 10000 == 1)
+			cout << fixed << setprecision(5) << " | " << Tmax;
+		else
+			if ((int)Tmax / 10000 == 0)
+				cout << fixed << setprecision(5) << " | " << ' ' << (double)Tmax;
+			else
+				if ((int)Tmax / 1000 == 0)
+					cout << fixed << setprecision(5) << " | " << '  ' << (double)Tmax;
+				else
+					if ((int)Tmax / 100 == 0)
+						cout << fixed << setprecision(5) << " | " << '   ' << (double)Tmax;
+					else
+						if ((int)Tmax / 10 == 0)
+							cout << fixed << setprecision(5) << " | " << '    ' << (double)Tmax;
+		if (X_i < 0)
+			cout << fixed << setprecision(5) << " |" << X_i;
+		else
+			cout << fixed << setprecision(5) << " | " << X_i;
+		if (myuntilfunction(X_i) < 0)
+		{
+			if ((int)myuntilfunction(X_i) / 10 == 0)
+				cout << fixed << setprecision(5) << " | " << myuntilfunction(X_i);
+			else
+				cout << fixed << setprecision(5) << " |" << myuntilfunction(X_i);
+		}
+		if (myuntilfunction(X_i) > 0)
+		{
+			if ((int)myuntilfunction(X_i) / 10 == 0)
+				cout << fixed << setprecision(5) << " |  " << myuntilfunction(X_i);
+			else
+				cout << fixed << setprecision(5) << " | " << myuntilfunction(X_i);
+		}
+		cout << fixed << setprecision(5) << " | " << P;
+		cout << " | " << P_ << endl;
+		p++;
+		Tmax *= 0.95;
+		if (myuntilfunction(X_i) < F_min)
+		{
+			F_min = myuntilfunction(X_i);
+			X_I_MIN = X_i;
+		}
+	}
+	cout << endl << "Минимум функции:" << F_min << endl << "Значение х в минимумe:" << X_I_MIN << endl;
+}
+
+int main()
+{
+	setlocale(LC_ALL, "rus");
+	otzhig(-4, 3);
+	system("pause");
+	return 0;
+}
